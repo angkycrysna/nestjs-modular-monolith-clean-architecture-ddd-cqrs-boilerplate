@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD } from '@nestjs/core';
 import {
   appConfig,
@@ -36,6 +37,7 @@ import { CsrfTokenMiddleware } from './presentation/middlewares/csrf-token.middl
         },
       ],
     }),
+    EventEmitterModule.forRoot(),
     DatabaseModule,
     MessagingModule,
     ActivityLogModule,
@@ -53,6 +55,6 @@ import { CsrfTokenMiddleware } from './presentation/middlewares/csrf-token.middl
 })
 export class SharedModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CsrfTokenMiddleware).forRoutes('*path');
+    consumer.apply(CsrfTokenMiddleware).forRoutes('{*path}');
   }
 }

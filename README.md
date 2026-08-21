@@ -1,98 +1,821 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Modular Monolith Boilerplate: Clean Architecture, DDD & CQRS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-grade NestJS starter for teams who want the structure of microservices without paying for microservices on day one. Build as a **modular monolith**, keep every module isolated behind explicit boundaries, and extract any module into its own service later by editing a handful of files, not rewriting the codebase.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+[![Node](https://img.shields.io/badge/node-24.19.0%20LTS-339933?logo=node.js&logoColor=white)](.nvmrc)
+[![NestJS](https://img.shields.io/badge/NestJS-11-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7%20strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Description
+**Keywords:** NestJS boilerplate · modular monolith · clean architecture · domain-driven design · CQRS · hexagonal architecture · ports and adapters · transactional outbox · TypeORM · microservices migration
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+---
 
-```bash
-$ pnpm install
+## Human-led, AI-assisted
+
+**Read this before anything else. It explains how this repository was built.**
+
+### The architecture is mine, not an AI's
+
+Every decision in this repository is a human decision. I made them.
+
+The system design, the module boundaries, the workflow, the architecture, the principles, the coding style, the business logic, the request flow, the tech stack, how all the pieces connect to each other, and the mindset behind the whole thing: **all of it was decided by me, Angky.** No AI chose the architecture here. No AI decided that modules talk through contracts, that the domain layer stays framework-free, or that events carry their full payload. Those are opinions, and they're mine.
+
+If you disagree with a decision in this codebase, argue with me. There's a person behind every one of them.
+
+### What I use AI for
+
+AI is a tool I use to move faster, not a substitute for thinking. Specifically:
+
+| I use it for | I don't use it for |
+|---|---|
+| Writing and structuring documentation | Deciding the architecture |
+| Turning a decision I've already made into code, faster | Deciding *what* should be built |
+| Making code more readable and maintainable | Choosing the patterns or the stack |
+| Pair programming, a second pair of eyes | Replacing my own critical thinking |
+| Catching things I missed, and correcting them | Rubber-stamping work nobody reviewed |
+
+That fifth row is the one I value most. Working alone, it's easy to miss an edge case or leave an inconsistency between two modules. Having something that reviews and pushes back is genuinely useful, but it's a reviewer, never the decision-maker.
+
+### About the code itself
+
+The code in this repository is written by both human and AI.
+
+**Every line generated by AI has been carefully reviewed, tested, and adjusted where needed.** Nothing gets blindly accepted, and nothing gets committed without being read and understood first. If AI produces something that works but doesn't fit the vision for this codebase, it gets rewritten. Working is not the bar; *aligned with the architecture* is the bar.
+
+I'd rather ship slower than let quality drift because something compiled and I didn't look at it.
+
+### How to get the best out of this repo
+
+Work *with* AI on it, the same way I do. This codebase is a good fit for that: the layers are explicit, the conventions are consistent, and the boundaries are documented, which means an AI assistant has enough structure to be genuinely helpful instead of guessing.
+
+But hold it to the same standard I do. Review what it writes. Understand it before you commit it. Make the architectural calls yourself.
+
+> **Coming soon:** I haven't yet built the AI skills and instruction files that would let an assistant work fluently in this codebase: knowing the conventions, the layer rules, and where each kind of code belongs without being told every time. That's in progress and I'll commit it later.
+
+## Table of contents
+
+- [Human-led, AI-assisted](#human-led-ai-assisted)
+- [Why this exists](#why-this-exists)
+- [What you actually get](#what-you-actually-get)
+- [The principles](#the-principles)
+- [The mindset](#the-mindset)
+- [Tech stack](#tech-stack)
+- [Getting started](#getting-started)
+- [Project structure](#project-structure)
+- [Writing your first API](#writing-your-first-api)
+- [How a request flows end to end](#how-a-request-flows-end-to-end)
+- [How modules talk to each other](#how-modules-talk-to-each-other)
+- [The path to microservices](#the-path-to-microservices)
+- [Conventions cheat sheet](#conventions-cheat-sheet)
+- [Project status](#project-status)
+
+---
+
+## Why this exists
+
+Most teams face the same fork in the road at the start of a project.
+
+Go with a **plain NestJS app**, and the first few months are fast. Then the folders fill up with `services/` that import each other in every direction, business rules end up scattered between controllers and TypeORM entities, and swapping the database or the queue means touching two hundred files. Nobody planned it. It just accumulated.
+
+Go with **microservices from day one**, and you spend the first quarter building deployment pipelines, service discovery, distributed tracing, and contract tests, all for a product with no users yet and a domain model you'll get wrong twice before you get it right.
+
+This repo takes the third path: **a monolith that is internally structured like a distributed system**. One deployable, one database, one repo, but with module boundaries strict enough that pulling a module out later is a mechanical operation rather than an archaeology project.
+
+The bet is simple. You don't know which parts of your system will need to scale independently until you've been in production for a while. So keep the boundaries strict and the deployment simple, and buy yourself the option to split later, cheaply.
+
+**This is for you if:** you're starting a new backend that you expect to grow, you have a small-to-medium team, and you'd rather spend your architecture budget upfront on boundaries than later on a rewrite.
+
+**This is probably overkill if:** you're building a CRUD admin panel, a prototype, or something you'll throw away in three months. The indirection here earns its keep over years, not weeks.
+
+---
+
+## What you actually get
+
+Everything below is implemented and wired up, not scaffolded TODOs.
+
+| Area | What's in the box |
+|---|---|
+| **Architecture** | Clean Architecture layers with an enforced dependency rule, DDD building blocks (aggregates, entities, value objects, domain events, guards), CQRS via `@nestjs/cqrs` |
+| **Persistence** | TypeORM + PostgreSQL, schema-per-module, generic base repository, domain↔ORM mappers, Unit of Work for transactions, read-replica support with automatic read/write splitting |
+| **Messaging** | Transactional outbox, in-process event bus, pluggable message broker (no-op / Kafka / RabbitMQ), Event-Carried State Transfer for integration events |
+| **Security** | Helmet, CORS, rate limiting, body-size limits, HMAC request signing with replay protection, CSRF double-submit cookie, all with timing-safe comparisons |
+| **Observability** | Pino structured JSON logging, correlation ID per request, request/response logging, configurable request timeouts, health endpoint |
+| **Auditing** | Activity log capturing who did what to which record, when, and what changed, with automatic redaction of sensitive fields |
+| **Errors** | Centralized error-code registry (Google AIP-193 style), i18n error messages resolved from `Accept-Language`, one global exception filter |
+| **Config** | Zod-validated environment variables that fail fast on boot, secret manager abstraction ready for AWS Secrets Manager |
+| **DX** | TypeScript strict mode, path aliases, ESLint + Prettier, Husky + Commitlint (conventional commits) |
+
+---
+
+## The principles
+
+Five ideas do all the work here. Understand these and the rest of the codebase is predictable.
+
+### 1. Modular monolith
+
+The application is split into **modules** (`src/modules/user`, `src/modules/notification`), each owning its own domain, its own database schema, and its own public contract. A module is a folder you could copy out of this repo, drop into an empty NestJS project, and have it mostly work.
+
+The rule that makes this real: **no module imports another module's internals.** Not its entities, not its repositories, not its services. Cross-module traffic goes through published contracts or events only.
+
+### 2. Clean Architecture: the dependency rule
+
+Four layers per module. Dependencies point **inward, always**:
+
+```
+   ┌──────────────────────────────────────────────────┐
+   │  Presentation      controllers, DTO binding      │
+   │       ↓ depends on                               │
+   │  Application       commands, queries, ports      │
+   │       ↓ depends on                               │
+   │  Domain            entities, VOs, business rules │  ← knows nothing
+   │       ↑ implements                               │
+   │  Infrastructure    TypeORM, Redis, brokers       │
+   └──────────────────────────────────────────────────┘
 ```
 
-## Compile and run the project
+- **Domain** has zero framework imports. No `@nestjs/*`, no `typeorm`. It's plain TypeScript that would run anywhere.
+- **Application** depends only on Domain. It defines *ports* (interfaces like `IUserRepository`, `IEventBus`) describing what it needs from the outside world.
+- **Infrastructure** implements those ports. It's the only layer that knows PostgreSQL, Redis, or Kafka exist.
+- **Presentation** depends on Application. Controllers dispatch commands and queries. They contain no business logic.
 
-```bash
-# development
-$ pnpm run start
+Infrastructure points *inward* even though it sits at the bottom: it implements interfaces owned by the inner layers. That inversion is what lets you replace TypeORM with Prisma by writing one new class.
 
-# watch mode
-$ pnpm run start:dev
+### 3. Domain-Driven Design
 
-# production mode
-$ pnpm run start:prod
+Business rules live in the domain layer, expressed as objects that can't be constructed in an invalid state:
+
+- **Aggregates** (`User`) are consistency boundaries, created through factory methods that enforce invariants.
+- **Value objects** (`Email`) are immutable and self-validating. An `Email` instance is *always* a valid, normalized email.
+- **Domain events** (`UserCreatedEvent`) record that something meaningful happened, raised by the aggregate itself.
+- **Guards** provide reusable invariant assertions so validation logic doesn't get copy-pasted.
+
+The test of whether this is working: you should be able to read `user.entity.ts` and understand the business rules without knowing what database you use.
+
+### 4. CQRS
+
+Writes and reads are separate paths.
+
+- **Commands** change state, run inside a transaction, emit events, and write an audit entry.
+- **Queries** read state. No side effects, no transactions, and they're free to bypass the domain model and hit a read-optimized projection later.
+
+Convention here: **the command class and its handler live in the same file.** Two files per operation is ceremony without benefit. When one operation needs to orchestrate several commands and queries, that's what a **Use Case** is for.
+
+### 5. Ports and adapters (hexagonal)
+
+Every external dependency sits behind an interface defined by the application layer, bound by a DI token:
+
+```ts
+{ provide: USER_REPOSITORY, useClass: UserRepository }
 ```
 
-## Run tests
+Swapping Redis for Memcached, or the no-op broker for Kafka, is a one-line change in a module file. Nothing in the domain or application layer notices.
+
+---
+
+## The mindset
+
+Rules of thumb this codebase is built around. When you're unsure what to do, these decide it.
+
+**Boundaries are cheap now and expensive later.** Adding a contract between two modules today takes ten minutes. Untangling two modules that grew into each other takes a sprint.
+
+**The domain layer is sacred.** If you're about to import something from `@nestjs/*` or `typeorm` into `domain/`, stop. You're solving it in the wrong layer.
+
+**Make the invalid state unrepresentable.** Don't validate an email in a controller and hope everyone downstream remembers. Put it in a value object so an invalid one can't exist.
+
+**One place to change per decision.** Database schema, message broker, secret store, cache: each is behind exactly one abstraction. If changing your mind requires edits in more than one file, the abstraction is wrong.
+
+**Errors are codes, not sentences.** Handlers throw `ERROR_CODES.RESOURCE_NOT_FOUND`. Translation into English or Indonesian happens once, in the global filter, based on `Accept-Language`. Error codes never leak table or module names, because that's an information disclosure risk.
+
+**No try/catch in handlers or controllers.** The global exception filter catches everything and shapes the response. Catching locally just produces inconsistent error payloads.
+
+**Every write is auditable.** Every command handler writes an activity log entry in the same transaction as the business change. If it isn't logged, it didn't happen.
+
+**Events carry their data.** An integration event ships the full payload the consumer needs (`{ userId, name, email }`), not just an ID. Consumers must never have to call back into the producer. That's the coupling you were trying to avoid.
+
+---
+
+## Tech stack
+
+### What's used today
+
+| Concern | Choice | Why |
+|---|---|---|
+| Runtime | **Node.js 24.19.0** (Active LTS) | Supported through April 2028 |
+| Framework | **NestJS 11** | DI container and module system that Clean Architecture maps onto naturally |
+| Language | **TypeScript 5.7**, strict | `any` is a warning, not a default |
+| Database | **PostgreSQL 14+** via **TypeORM** | Schemas give per-module isolation inside one database |
+| CQRS | **@nestjs/cqrs** | Command/Query/Event buses without hand-rolling them |
+| Events | **@nestjs/event-emitter** + transactional outbox | Reliable delivery without distributed transactions |
+| Cache | **Redis** via `ioredis` | Optional. Cache calls no-op when `REDIS_URL` is unset |
+| Logging | **Pino** via `nestjs-pino` | Structured JSON, ready for Datadog/CloudWatch/ELK |
+| Validation | **class-validator** (DTOs) + **Zod** (env) | Fail fast at the edges |
+| Scheduling | **@nestjs/schedule** | Drives the outbox processor |
+| Package manager | **pnpm 10+** | Strict node_modules, fast installs |
+
+### What it's designed to become
+
+None of these require an architectural change. Each is a DI binding or a config swap.
+
+| Concern | Today | Later |
+|---|---|---|
+| Message broker | `NoopMessageBroker` (in-process) | **Kafka** or **RabbitMQ**. Implementations are already in `shared/infrastructure/messaging/`, commented out pending the client package |
+| Secrets | Env vars via platform dashboard | **AWS Secrets Manager**. Swap `SecretManagerAdapter`, one file |
+| Hosting | Render | **AWS ECS + RDS + S3** |
+| Database | Single Postgres, schema-per-module | Read replicas (already supported), then a database per extracted service |
+| Deployment | One monolith | Selected modules extracted as services. See [the path to microservices](#the-path-to-microservices) |
+
+### Deliberately not chosen
+
+No GraphQL, no ORM-generated APIs, no event-sourcing. Each adds real cost and this boilerplate takes the position that you should add them when you have a concrete reason, not preemptively.
+
+---
+
+## Getting started
+
+### Prerequisites
+
+| Requirement | Version | Notes |
+|---|---|---|
+| Node.js | **24.19.0** | Pinned in [`.nvmrc`](.nvmrc), enforced by `engines` in `package.json` |
+| pnpm | **>= 10** | `corepack enable` is the easiest way to get it |
+| PostgreSQL | **14+** | Local, Docker, or a hosted instance (Supabase, RDS) |
+| Redis | optional | Only needed if you use caching |
+
+> **Note on Node.js:** Node 20 reached end-of-life on 30 April 2026 and no longer receives security patches. This project targets Node 24 (Active LTS, supported through April 2028). Run `nvm use` in the project root and it picks up the pinned version automatically.
+
+### 1. Clone and install
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+git clone <your-repo-url> && cd nestjs-modular-monolith-clean-architecture-ddd-cqrs-boilerplate
 ```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+nvm install && nvm use
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+```bash
+corepack enable && pnpm install
+```
 
-## Resources
+### 2. Start a database
 
-Check out a few resources that may come in handy when working with NestJS:
+If you don't already have PostgreSQL running:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+docker run -d --name boilerplate-pg -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:16
+```
 
-## Support
+### 3. Configure the environment
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+cp .env.example .env
+```
 
-## Stay in touch
+At minimum, fill in the database block. Everything else has working defaults:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=postgres
+```
+
+Environment variables are validated by Zod at startup. A missing or malformed variable stops the boot with a readable message rather than failing mysteriously at 3am.
+
+### 4. Run migrations
+
+This creates the `users` and `notifications` schemas plus the shared `outbox_events` and `activity_logs` tables.
+
+```bash
+pnpm migration:run
+```
+
+### 5. Start the app
+
+```bash
+pnpm start:dev
+```
+
+The API is served under `/api/v1`. Check it's alive:
+
+```bash
+curl http://localhost:3000/api/v1/health
+```
+
+Create a user and watch the whole pipeline fire: domain event, outbox, cross-module notification, audit log:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/users -H "Content-Type: application/json" -d '{"name":"Ada Lovelace","email":"ada@example.com"}'
+```
+
+### Everyday commands
+
+| Command | What it does |
+|---|---|
+| `pnpm start:dev` | Watch mode |
+| `pnpm build` | Compile to `dist/` |
+| `pnpm start:prod` | Run the compiled build |
+| `pnpm lint` | ESLint with `--fix` |
+| `pnpm format` | Prettier |
+| `pnpm test` | Jest unit tests |
+| `pnpm test:e2e` | End-to-end tests |
+| `pnpm migration:generate src/modules/<module>/infrastructure/persistence/typeorm/migrations/<Name>` | Generate a migration from entity changes |
+| `pnpm migration:run` | Apply pending migrations |
+| `pnpm migration:revert` | Roll back the last migration |
+
+---
+
+## Project structure
+
+```
+src/
+├── main.ts                     Bootstrap: secrets → helmet → CORS → versioning → filters → interceptors
+├── app.module.ts               Root module, imports SharedModule + every feature module
+│
+├── shared/                     Everything modules are allowed to depend on
+│   ├── domain/                 Framework-free DDD building blocks
+│   │   ├── base-entity.ts          Identity + timestamps + equality
+│   │   ├── base-aggregate-root.ts  Collects and clears domain events
+│   │   ├── base-value-object.ts    Immutability + structural equality
+│   │   ├── domain-event.ts         In-process event base
+│   │   ├── integration-event.ts    Cross-module event base (ECST)
+│   │   ├── guard.ts                Reusable invariant assertions
+│   │   └── interfaces/             Generic IRepository<T> port
+│   │
+│   ├── application/            Ports and cross-cutting application concerns
+│   │   ├── base-command.ts         BaseCommand + CommandContext (actor, IP, correlation ID)
+│   │   ├── base-use-case.ts        Orchestrates multiple commands/queries
+│   │   ├── interfaces/             IEventBus, IUnitOfWork, ICacheManager, IActivityLogger,
+│   │   │                           IMessageBroker, IOutboxRepository, ISecretManager
+│   │   ├── exceptions/             Error-code registry + i18n messages
+│   │   ├── activity/               Type-safe activity action/target builders
+│   │   └── dtos/                   Shared pagination DTOs
+│   │
+│   ├── infrastructure/         Implementations of the ports above
+│   │   ├── config/                 App, security, database config + Zod env validation
+│   │   ├── database/               TypeORM module (read-replica aware) + CLI datasource + migrations
+│   │   ├── persistence/typeorm/    Base ORM entity, base repository, Unit of Work
+│   │   ├── messaging/              Event bus, outbox (+ cron processor), Noop/Kafka/RabbitMQ brokers
+│   │   ├── cache/                  Redis cache service
+│   │   ├── activity-log/           Audit log entity + service
+│   │   ├── logger/                 Pino configuration
+│   │   └── secrets/                Secret manager adapter
+│   │
+│   ├── presentation/           HTTP concerns shared by all modules
+│   │   ├── guards/                 HMAC signing, CSRF
+│   │   ├── interceptors/           Correlation ID, logging, timeout
+│   │   ├── filters/                Global exception filter (error codes → i18n)
+│   │   ├── middlewares/            CSRF token issuance
+│   │   ├── helpers/                buildCommandContext(req)
+│   │   └── controllers/            Health check
+│   │
+│   └── contracts/              PUBLIC cross-module API surface
+│       └── user/                   USER_FACADE token + IUserFacade + UserResponseDto
+│
+└── modules/                    Feature modules (or as I call it a Domain), one bounded context each
+    ├── user/                       Reference implementation (all four layers)
+    └── notification/               Cross-module communication demo (consumes user.registered)
+```
+
+### The two directories that matter most
+
+**`shared/`** is the platform. Modules depend on it freely. It contains no business logic, only base classes, ports, and infrastructure.
+
+**`shared/contracts/`** is the *only* place a module's public API is described. If module B needs something from module A, it comes from here. This directory is what makes microservice extraction tractable: the import path `@contracts/user` stays identical whether `user` is a folder in this repo or an npm package published by a separate service.
+
+### Path aliases
+
+Configured in `tsconfig.json` and mirrored in the Jest `moduleNameMapper`. Use these instead of relative imports, always.
+
+| Alias | Points to | Use for |
+|---|---|---|
+| `@shared/*` | `src/shared/*` | Base classes, ports, infrastructure |
+| `@contracts/*` | `src/shared/contracts/*` | Cross-module contracts |
+| `@user/*`, `@notification/*` | `src/modules/<name>/*` | A module's own internals |
+| `@modules/*` | `src/modules/*` | Rarely needed directly |
+
+---
+
+## Writing your first API
+
+Let's add a `Product` module with a create endpoint. This is the whole loop: where each file goes and why.
+
+**The file map:**
+
+| # | Layer | File | Responsibility |
+|---|---|---|---|
+| 1 | Module root | `product.constants.ts` | Schema name, DI tokens, audit actions |
+| 2 | Domain | `domain/entities/product.entity.ts` | Business rules and invariants |
+| 3 | Domain | `domain/interfaces/product-repository.interface.ts` | The port, what persistence must provide |
+| 4 | Application | `application/dtos/create-product.dto.ts` | HTTP input shape + validation |
+| 5 | Application | `application/commands/create-product.command.ts` | Command **and** handler, together |
+| 6 | Infrastructure | `infrastructure/persistence/typeorm/entities/product.orm-entity.ts` | Database table shape |
+| 7 | Infrastructure | `.../mappers/product.mapper.ts` | Domain ↔ ORM translation |
+| 8 | Infrastructure | `.../repositories/product.repository.ts` | The adapter, implements the port |
+| 9 | Presentation | `presentation/controllers/product.controller.ts` | HTTP route → command bus |
+| 10 | Module root | `product.module.ts` | Wires the DI bindings |
+
+### 1. Constants: schema, tokens, audit actions
+
+```ts
+// src/modules/product/product.constants.ts
+export const PRODUCT_DB_SCHEMA = 'products';   // change to 'public' when extracting to a service
+export const PRODUCT_REPOSITORY = Symbol('PRODUCT_REPOSITORY');
+
+export const PRODUCT_ACTIONS = defineModuleActions('product', {
+  item: ['created', 'updated', 'deleted'],
+} as const);                                    // → 'product.item.created'
+
+export const PRODUCT_TARGETS = defineModuleTargets({ products: 'products' } as const);
+```
+
+### 2. Domain entity: the business rules
+
+No decorators, no framework. A `Product` cannot exist with a negative price.
+
+```ts
+// src/modules/product/domain/entities/product.entity.ts
+export class Product extends BaseAggregateRoot<ProductProps> {
+  get name(): string { return this.props.name; }
+  get priceCents(): number { return this.props.priceCents; }
+
+  static create(name: string, priceCents: number): Product {
+    const result = Guard.combine([
+      Guard.againstNullOrUndefined(name, 'name'),
+      Guard.lengthBetween(name, 2, 200, 'name'),
+      Guard.inRange(priceCents, 1, Number.MAX_SAFE_INTEGER, 'priceCents'),
+    ]);
+    if (!result.succeeded) {
+      throw new DomainException(ERROR_CODES.VALIDATION_FAILED, { reason: result.message });
+    }
+
+    const product = new Product({ name: name.trim(), priceCents });
+    product.addDomainEvent(new ProductCreatedEvent(product.id, product.name));
+    return product;
+  }
+
+  /** Rebuild from the database. No validation, no events. */
+  static reconstitute(id: string, name: string, priceCents: number, createdAt: Date, updatedAt: Date): Product {
+    return new Product({ name, priceCents }, id, createdAt, updatedAt);
+  }
+}
+```
+
+> Two factories on purpose. `create()` is for genuinely new objects: it validates and raises events. `reconstitute()` is for rows already in the database, and they were validated when they were created, and replaying their creation event years later would be wrong.
+
+### 3. The port: what the domain needs from storage
+
+```ts
+// src/modules/product/domain/interfaces/product-repository.interface.ts
+export interface IProductRepository extends IRepository<Product> {
+  findByName(name: string): Promise<Product | null>;
+}
+```
+
+The domain declares what it needs. It does not care who provides it.
+
+### 4. Input DTO
+
+```ts
+// src/modules/product/application/dtos/create-product.dto.ts
+export class CreateProductDto {
+  @IsString() @IsNotEmpty() @MaxLength(200)
+  name!: string;
+
+  @IsInt() @Min(1)
+  priceCents!: number;
+}
+```
+
+### 5. Command + handler in one file
+
+This is where orchestration lives: check preconditions, build the aggregate, save, emit, audit.
+
+```ts
+// src/modules/product/application/commands/create-product.command.ts
+export class CreateProductCommand extends BaseCommand {
+  constructor(
+    public readonly name: string,
+    public readonly priceCents: number,
+    context: CommandContext,
+  ) { super(context); }
+}
+
+@CommandHandler(CreateProductCommand)
+export class CreateProductCommandHandler
+  implements ICommandHandler<CreateProductCommand, ProductResponseDto>
+{
+  constructor(
+    @Inject(PRODUCT_REPOSITORY) private readonly repo: IProductRepository,
+    @Inject(UNIT_OF_WORK) private readonly unitOfWork: IUnitOfWork,
+    @Inject(ACTIVITY_LOGGER) private readonly activityLogger: IActivityLogger,
+  ) {}
+
+  async execute(command: CreateProductCommand): Promise<ProductResponseDto> {
+    if (await this.repo.findByName(command.name)) {
+      throw new ApplicationException(ERROR_CODES.DUPLICATE_ENTRY, HttpStatus.CONFLICT, { field: 'name' });
+    }
+
+    const product = Product.create(command.name, command.priceCents);
+
+    // Business write and audit entry commit together, or not at all.
+    const saved = await this.unitOfWork.execute(async () => {
+      const persisted = await this.repo.save(product);
+
+      await this.activityLogger.log({
+        action: PRODUCT_ACTIONS.item.created,
+        actorId: command.performedBy,
+        actorName: command.performedByName,
+        module: 'product',
+        targetId: persisted.id,
+        targetTable: PRODUCT_TARGETS.products,
+        oldData: null,
+        newData: { name: persisted.name, priceCents: persisted.priceCents },
+        correlationId: command.correlationId,
+        ipAddress: command.ipAddress,
+        userAgent: command.userAgent,
+      });
+
+      return persisted;
+    });
+
+    return ProductResponseDto.from({
+      id: saved.id,
+      name: saved.name,
+      priceCents: saved.priceCents,
+      createdAt: saved.createdAt,
+      updatedAt: saved.updatedAt,
+    });
+  }
+}
+```
+
+Note what's *absent*: no try/catch, no HTTP concepts, no SQL. Failures propagate to the global exception filter, which turns an error code into a localized response.
+
+If this operation also needed to notify another module, you'd publish an integration event inside the same `unitOfWork.execute()` block. That's the outbox pattern, and `create-user.command.ts` shows it in full.
+
+### 6-8. Infrastructure: the adapter side
+
+```ts
+// .../typeorm/entities/product.orm-entity.ts
+@Entity({ name: 'products', schema: PRODUCT_DB_SCHEMA })
+export class ProductOrmEntity extends BaseTypeOrmEntity {
+  @Column() name!: string;
+  @Column({ type: 'int' }) priceCents!: number;
+}
+```
+
+```ts
+// .../typeorm/mappers/product.mapper.ts
+export class ProductMapper {
+  static toDomain(orm: ProductOrmEntity): Product {
+    return Product.reconstitute(orm.id, orm.name, orm.priceCents, orm.createdAt, orm.updatedAt);
+  }
+  static toOrm(domain: Product): ProductOrmEntity {
+    const orm = new ProductOrmEntity();
+    orm.id = domain.id; orm.name = domain.name; orm.priceCents = domain.priceCents;
+    return orm;
+  }
+}
+```
+
+```ts
+// .../typeorm/repositories/product.repository.ts
+@Injectable()
+export class ProductRepository
+  extends BaseTypeOrmRepository<Product, ProductOrmEntity>
+  implements IProductRepository
+{
+  constructor(@InjectRepository(ProductOrmEntity) repo: Repository<ProductOrmEntity>) {
+    super(repo, ProductMapper.toDomain, ProductMapper.toOrm);
+  }
+
+  async findByName(name: string): Promise<Product | null> {
+    const orm = await this.ormRepo.findOne({ where: { name } });
+    return orm ? this.toDomain(orm) : null;
+  }
+}
+```
+
+The mapper is the seam that keeps the domain clean. Your database columns can be renamed, denormalized, or split across tables without the domain model noticing.
+
+### 9. Controller, thin on purpose
+
+```ts
+// src/modules/product/presentation/controllers/product.controller.ts
+@Controller({ path: 'products', version: '1' })
+export class ProductController {
+  constructor(private readonly commandBus: CommandBus) {}
+
+  @Post()
+  async create(@Body() dto: CreateProductDto, @Req() req: Request): Promise<ProductResponseDto> {
+    return this.commandBus.execute(
+      new CreateProductCommand(dto.name, dto.priceCents, buildCommandContext(req)),
+    );
+  }
+}
+```
+
+`buildCommandContext(req)` pulls the correlation ID, actor, IP, and user agent off the request so every command carries its audit context automatically.
+
+### 10. Module: the wiring
+
+```ts
+// src/modules/product/product.module.ts
+@Module({
+  imports: [SharedModule, CqrsModule, TypeOrmModule.forFeature([ProductOrmEntity])],
+  controllers: [ProductController],
+  providers: [
+    CreateProductCommandHandler,
+    { provide: PRODUCT_REPOSITORY, useClass: ProductRepository },  // port → adapter
+  ],
+})
+export class ProductModule {}
+```
+
+Register it in `app.module.ts`, generate a migration, and you're done:
+
+```bash
+pnpm migration:generate src/modules/product/infrastructure/persistence/typeorm/migrations/CreateProductTable && pnpm migration:run
+```
+
+### Where does my code go?
+
+| If you're writing... | It belongs in |
+|---|---|
+| A business rule or invariant | `domain/entities` or `domain/value-objects` |
+| "What must be true for this to be valid" | A `Guard` inside a domain factory |
+| An interface for something external | `domain/interfaces` (persistence) or `shared/application/interfaces` (cross-cutting) |
+| Orchestration: fetch, decide, save, emit | `application/commands` or `application/queries` |
+| A multi-step operation spanning commands | `application/use-cases` |
+| SQL, HTTP clients, SDK calls | `infrastructure/`, always |
+| Request/response shaping | `presentation/` |
+| Something two modules both need | `shared/`, or `shared/contracts/` if it's a module's public API |
+
+---
+
+## How a request flows end to end
+
+`POST /api/v1/users`, every layer, in order:
+
+```
+HTTP request
+  │
+  ├─ Helmet, CORS, rate limiter, body-size limit
+  ├─ CorrelationIdInterceptor        attaches a UUID (or reuses the client's)
+  ├─ HMAC / CSRF guards              if enabled
+  ├─ ValidationPipe                  CreateUserDto validated
+  │
+  ▼ UserController.create()
+  └─ CommandBus.execute(CreateUserCommand + CommandContext)
+      │
+      ▼ CreateUserCommandHandler
+        ├─ userRepo.findByEmail()          duplicate check → 409 if found
+        ├─ User.create()                   invariants enforced, UserCreatedEvent raised
+        │
+        ├─ unitOfWork.execute()  ┐ ONE transaction
+        │   ├─ userRepo.save()   │
+        │   ├─ eventBus.publishIntegrationEvent()  → row in outbox_events
+        │   └─ activityLogger.log()                → row in activity_logs
+        │                        ┘ commit or roll back together
+        │
+        └─ eventBus.publishDomainEvents()  after commit, in-process
+      │
+      ▼ 201 Created + UserResponseDto
+```
+
+Then, asynchronously:
+
+```
+OutboxProcessor (cron)
+  └─ reads unpublished outbox_events
+      └─ dispatches to IMessageBroker  (monolith: in-process; later: Kafka/RabbitMQ)
+          └─ NotificationModule → OnUserRegisteredHandler
+              └─ CommandBus.execute(SendWelcomeNotificationCommand)
+```
+
+The outbox is what makes this reliable. The event is written in the same transaction as the user row, so it's impossible to create a user without queuing the notification, or to queue a notification for a user whose creation rolled back. If the process crashes before dispatch, the cron picks it up on restart.
+
+---
+
+## How modules talk to each other
+
+Two channels, and picking the right one matters.
+
+### Asynchronous: integration events (prefer this)
+
+The producer publishes an event and forgets. The consumer reacts. Neither knows the other exists.
+
+`UserRegisteredIntegrationEvent` carries `{ userId, name, email }`, the full payload the consumer needs. That's **Event-Carried State Transfer**: the notification module never calls back into the user module for details.
+
+Event names are dot-notation strings (`'user.registered'`), not class names, so a Python or Go service can consume them later without caring about your TypeScript.
+
+This is the default. Reach for it unless you genuinely need an answer right now.
+
+### Synchronous: the contract + adapter pattern
+
+Sometimes you need a value immediately. The rule: **the consuming module owns the adapter.**
+
+1. The producer publishes a contract in `shared/contracts/<module>/`: a token, an interface, and a DTO. `@contracts/user` already does this with `USER_FACADE` and `IUserFacade`.
+2. The **consuming** module writes an adapter implementing that interface. In the monolith it dispatches to the producer's query bus in-process.
+3. The consumer binds it: `{ provide: USER_FACADE, useClass: UserAdapter }`.
+
+Why the adapter lives in the consumer rather than a facade in the producer: when `user` becomes its own service, you rewrite the *inside* of `UserAdapter` to make an HTTP call. One file changes. The DI binding, the import path, and every call site stay exactly as they are. A facade owned by the producer would become dead code, and consumers would have to change both their imports *and* build a client, two edits instead of one.
+
+---
+
+## The path to microservices
+
+This is the payoff, so it's worth being concrete. Extracting the `user` module into its own service:
+
+| Step | What you do | Effort |
+|---|---|---|
+| 1 | Copy `src/modules/user/` into a new repo | It's already self-contained |
+| 2 | Copy `src/shared/` alongside it, or publish it as an internal package | Mechanical |
+| 3 | Change `USER_DB_SCHEMA` from `'users'` to `'public'` | One constant |
+| 4 | Remap `@user/*` in `tsconfig.json` and the Jest `moduleNameMapper` | Two lines |
+| 5 | Publish `shared/contracts/user/` as an npm package; remap `@contracts/*` to it | Import paths in consumers **do not change** |
+| 6 | In the monolith, rewrite `UserAdapter` internals to call HTTP/gRPC instead of the query bus | One file per consumer |
+| 7 | Swap `NoopMessageBroker` for `KafkaMessageBroker` in the DI binding | One line, both sides |
+| 8 | Point the new service at its own database | Config |
+
+What you *don't* do: rewrite business logic, restructure folders, redesign the event contracts, or hunt down cross-module imports, because there weren't any.
+
+**The design decisions that make this work,** each made specifically for this moment:
+
+- **Schema-per-module** means the data is already partitioned. Extraction is a `pg_dump` of one schema, not a table-by-table untangling.
+- **Contracts in `@contracts/`** mean the public API is already written down and already the only thing consumers use.
+- **Consumer-owned adapters** localize the transport change to one file per consumer.
+- **The outbox + broker abstraction** means the messaging path is identical in-process and over Kafka. You flip a binding.
+- **Dot-notation event names and ECST payloads** mean events are already language-agnostic wire contracts.
+- **Domain layer with zero framework imports** means the business rules move without modification.
+
+You may never need to do any of this, and that's fine. The point is that the option stays open at roughly the cost of good structure you'd want anyway.
+
+---
+
+## Conventions cheat sheet
+
+**File naming.** Kebab-case throughout, with meaningful suffixes:
+
+| Suffix | Example | What it is |
+|---|---|---|
+| `.entity.ts` | `user.entity.ts` | Domain entity / aggregate |
+| `.value-object.ts` | `email.value-object.ts` | Value object |
+| `.event.ts` | `user-created.event.ts` | Domain event (in-process) |
+| `.integration-event.ts` | `user-registered.integration-event.ts` | Cross-module event |
+| `.interface.ts` | `user-repository.interface.ts` | Port |
+| `.orm-entity.ts` | `user.orm-entity.ts` | TypeORM entity |
+| `.command.ts` / `.query.ts` | `create-user.command.ts` | Command/query **and** its handler |
+
+**Code conventions:**
+
+- Interfaces are `I`-prefixed in code (`IUserRepository`), but filenames use the `.interface.ts` suffix instead.
+- Injection tokens are `Symbol()`s: module-internal ones in `<module>.constants.ts`, cross-module ones in `@contracts/`.
+- Inline type imports: `import { TOKEN, type IThing } from '...'`, not two separate statements.
+- Every folder has a barrel `index.ts`.
+- Activity actions follow `<module>.<resource>.<past-tense-verb>`, generated by `defineModuleActions()` so typos fail at compile time.
+- Error codes are `UPPER_SNAKE_CASE` and describe the *error*, never the resource. Context goes in `metadata`, e.g. `{ field: 'email' }`.
+- TypeORM columns with union types (`string | null`) need an explicit `type:`, because TypeORM can't infer it.
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/), enforced by Commitlint via a Husky hook.
+
+---
+
+## Project status
+
+This is an actively developed boilerplate. Honest state of things:
+
+**Done and working:**
+
+- [x] Shared domain, application, and infrastructure layers
+- [x] Security: HMAC, CSRF, Helmet, throttling, body limits
+- [x] Config with Zod validation, secret manager abstraction
+- [x] Database module with read-replica support, Unit of Work, base repository
+- [x] Outbox pattern with cron processor; Noop/Kafka/RabbitMQ broker implementations
+- [x] Activity logging with sensitive-field redaction
+- [x] Error codes with English and Indonesian translations
+- [x] Pino logging with correlation IDs
+- [x] User module, full reference implementation
+- [x] Notification module, cross-module event consumption
+- [x] Migrations for shared tables and both module schemas
+
+**Not there yet:**
+
+- [ ] **Test suite.** Jest is configured but no specs are written. The reference modules are the place to start.
+- [ ] **A worked adapter example.** The `IUserFacade` contract exists; no module needs a synchronous cross-module call yet, so no adapter has been written. The pattern is documented above.
+- [ ] Authentication / authorization module
+- [ ] OpenAPI / Swagger generation
+- [ ] Dockerfile and CI pipeline
+
+Contributions and issues are welcome.
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+[MIT](LICENSE) © [Angky Crysna](mailto:angky.tech@gmail.com)

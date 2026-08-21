@@ -2,6 +2,25 @@
   "name": "nestjs-modular-monolith-clean-architecture-ddd-cqrs-boilerplate",
   "version": "0.0.1",
   "description": "Production-grade NestJS boilerplate with Modular Monolith, Clean Architecture, DDD, and CQRS",
+  "keywords": [
+    "nestjs",
+    "nestjs-boilerplate",
+    "nestjs-starter",
+    "nestjs-template",
+    "modular-monolith",
+    "clean-architecture",
+    "hexagonal-architecture",
+    "ddd",
+    "domain-driven-design",
+    "cqrs",
+    "event-driven",
+    "outbox-pattern",
+    "typeorm",
+    "postgresql",
+    "typescript",
+    "microservices",
+    "nodejs"
+  ],
   "author": "Angky Crysna <angky.tech@gmail.com>",
   "private": true,
   "license": "MIT",
@@ -29,6 +48,7 @@
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
     "@nestjs/cqrs": "^11.0.3",
+    "@nestjs/event-emitter": "^3.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/schedule": "^6.1.1",
     "@nestjs/throttler": "^6.5.0",
@@ -57,7 +77,7 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "^24.13.3",
     "@types/supertest": "^6.0.2",
     "dotenv": "^17.3.1",
     "eslint": "^9.18.0",
@@ -97,12 +117,19 @@
     },
     "moduleNameMapper": {
       "^@shared/(.*)$": "<rootDir>/shared/$1",
-      "^@modules/(.*)$": "<rootDir>/modules/$1"
+      "^@modules/(.*)$": "<rootDir>/modules/$1",
+      "^@user/(.*)$": "<rootDir>/modules/user/$1",
+      "^@notification/(.*)$": "<rootDir>/modules/notification/$1",
+      "^@contracts/(.*)$": "<rootDir>/shared/contracts/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": ">=24.19.0",
+    "pnpm": ">=10.0.0"
   }
 }

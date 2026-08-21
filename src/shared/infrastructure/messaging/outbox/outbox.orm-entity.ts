@@ -30,7 +30,7 @@ export enum OutboxEventStatus {
  *
  * Lives in the 'shared' schema since it serves all modules.
  */
-@Entity({ name: 'outbox_events', schema: 'shared' })
+@Entity({ name: 'outbox_events' })
 export class OutboxOrmEntity {
   @PrimaryColumn('uuid')
   id!: string;

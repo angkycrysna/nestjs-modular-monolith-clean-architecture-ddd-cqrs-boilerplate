@@ -33,6 +33,12 @@ export interface IEventBus {
    * Publish an integration event (cross-module).
    * The implementation should persist the event to the outbox table
    * so it can be dispatched reliably by the outbox processor.
+   *
+   * @param event - The integration event to publish.
+   * @param metadata - Optional metadata for tracing (correlationId, sourceModule, etc.).
    */
-  publishIntegrationEvent(event: IntegrationEvent): Promise<void>;
+  publishIntegrationEvent(
+    event: IntegrationEvent,
+    metadata?: Record<string, unknown>,
+  ): Promise<void>;
 }

@@ -1,23 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { IMessageBroker } from '@shared/application/interfaces/message-broker.interface';
 
 /**
- * No-op message broker — default for monolith mode.
+ * In-process message broker — default for monolith mode.
  *
- * Logs published messages but does not dispatch to any external broker.
- * The outbox processor still marks events as published, maintaining
- * a consistent audit trail.
+ * Emits events via EventEmitter2 so @OnEvent() handlers in other modules
+ * receive integration events without an external broker.
  *
- * To switch to a real broker, swap the DI binding in messaging.module.ts:
- *   { provide: MESSAGE_BROKER, useClass: KafkaMessageBroker }
+ * When switching to Kafka/RabbitMQ:
+ *   1. Swap DI in messaging.module.ts: { provide: MESSAGE_BROKER, useClass: KafkaMessageBroker }
+ *   2. Replace @OnEvent() handlers with broker-specific consumers
  */
 @Injectable()
 export class NoopMessageBroker implements IMessageBroker {
   private readonly logger = new Logger(NoopMessageBroker.name);
 
+  constructor(private readonly eventEmitter: EventEmitter2) {}
+
   publish(topic: string, message: string): Promise<void> {
-    this.logger.debug(
-      `[Noop] Would publish to "${topic}": ${message.substring(0, 200)}`,
+    this.logger.debug(`Published to "${topic}" (in-process)`);
+    this.eventEmitter.emit(
+      topic,
+      JSON.parse(message) as Record<string, unknown>,
     );
     return Promise.resolve();
   }
@@ -26,7 +31,9 @@ export class NoopMessageBroker implements IMessageBroker {
     topic: string,
     _handler: (message: string) => Promise<void>,
   ): Promise<void> {
-    this.logger.debug(`[Noop] Would subscribe to "${topic}"`);
+    this.logger.debug(
+      `Subscribe to "${topic}" — not needed in monolith (use @OnEvent instead)`,
+    );
     void _handler;
     return Promise.resolve();
   }

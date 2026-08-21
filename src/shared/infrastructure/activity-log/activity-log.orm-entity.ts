@@ -14,7 +14,7 @@ import {
  *
  * Lives in the 'shared' schema since it serves all modules.
  */
-@Entity({ name: 'activity_logs', schema: 'shared' })
+@Entity({ name: 'activity_logs' })
 export class ActivityLogOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
